@@ -1,0 +1,1 @@
+1. need to add protoc.exe to root folder then intellij can build and generate file.
