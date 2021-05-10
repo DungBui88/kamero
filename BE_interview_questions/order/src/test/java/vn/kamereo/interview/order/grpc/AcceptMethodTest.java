@@ -14,10 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import vn.kamereo.interview.order.AcceptRequest;
-import vn.kamereo.interview.order.CreateOrderRequest;
-import vn.kamereo.interview.order.CreateOrderResponse;
-import vn.kamereo.interview.order.OrderServiceGrpc;
+import vn.kamereo.interview.order.*;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -84,6 +81,33 @@ class AcceptMethodTest {
             );
         } catch (final StatusRuntimeException e) {
             Assertions.assertEquals("2", e.getStatus().getDescription());
+        }
+    }
+
+    @Test
+    void testFailAcceptAfterCancel(final Resources resources) {
+        resources.register(channel, Duration.ofSeconds(1));
+        resources.register(server, Duration.ofSeconds(1));
+
+        final CreateOrderResponse createResponse = client.createOrder(CreateOrderRequest.newBuilder()
+                .setUserId(UUID.randomUUID().toString())
+                .addItems(CreateOrderRequest.OrderItem.newBuilder()
+                        .setProductId(UUID.randomUUID().toString())
+                        .setPrice(100_000)
+                        .setQuantity(10)
+                        .build())
+                .build()
+        );
+
+        client.cancel(CancelRequest.newBuilder().setOrderId(createResponse.getOrderId()).build());
+
+        try {
+            client.adminAccept(AcceptRequest.newBuilder()
+                    .setOrderId(createResponse.getOrderId())
+                    .build()
+            );
+        } catch (final StatusRuntimeException e) {
+            Assertions.assertEquals("11", e.getStatus().getDescription());
         }
     }
 }

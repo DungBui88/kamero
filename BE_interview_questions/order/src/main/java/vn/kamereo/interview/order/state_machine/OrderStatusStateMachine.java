@@ -13,13 +13,13 @@ import static vn.kamereo.interview.order.dto.OrderStatus.CANCELED;
 import static vn.kamereo.interview.order.dto.OrderStatus.DELIVERED;
 import static vn.kamereo.interview.order.dto.OrderStatus.PENDING;
 
-@Component
+@Component(value = "statusStateMachine")
 public class OrderStatusStateMachine extends StateMachineBase<Order, OrderStatus, OrderStatusTransition> {
 
     @Override
     protected void configure() {
         transition(OrderStatusTransition.ACCEPT)
-                .from(PENDING)
+                .from(OrderStatus.values())
                 .to(ACCEPTED);
 
         transition(OrderStatusTransition.CANCEL)

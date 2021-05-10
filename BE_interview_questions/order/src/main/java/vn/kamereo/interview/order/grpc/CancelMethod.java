@@ -2,6 +2,7 @@ package vn.kamereo.interview.order.grpc;
 
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import vn.kamereo.interview.order.state_machine.OrderStatusStateMachine;
 import vn.kamereo.state_machine.InvalidTransitionException;
 
 @Component
+@Getter
 public class CancelMethod implements ServiceMethod<CancelRequest, CancelResponse>  {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CancelMethod.class);

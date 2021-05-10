@@ -1,11 +1,15 @@
 package vn.kamereo.interview.order.dto;
 
+import lombok.Getter;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
+
 @ParametersAreNonnullByDefault
 @Nonnull
+@Getter
 public class Order {
 
     @Nullable
@@ -28,14 +32,6 @@ public class Order {
         this.userId = userId;
         this.orderItems = orderItems;
         this.status = status;
-    }
-
-    public String getOrderId() {
-        return orderId;
-    }
-
-    public OrderStatus getStatus() {
-        return status;
     }
 
     public Order withOrderStatus(final OrderStatus newState) {

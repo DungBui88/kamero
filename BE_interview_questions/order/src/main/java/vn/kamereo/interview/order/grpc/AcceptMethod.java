@@ -43,8 +43,7 @@ public class AcceptMethod implements ServiceMethod<AcceptRequest, AcceptResponse
     public void call(final AcceptRequest request, final StreamObserver<AcceptResponse> responseObserver) {
         try {
             final Order order = orderRepository.findById(request.getOrderId());
-            final Order acceptedOrder = statusStateMachine.apply(order, OrderStatusTransition.ACCEPT);
-            orderRepository.save(acceptedOrder);
+            applyOrderState(order, OrderStatusTransition.ACCEPT);
             orderEventPublisher.emit(OrderEvent.ORDER_ACCEPTED);
 
             responseObserver.onNext(AcceptResponse.getDefaultInstance());
@@ -59,5 +58,10 @@ public class AcceptMethod implements ServiceMethod<AcceptRequest, AcceptResponse
             LOGGER.info("Internal server error:", e);
             responseObserver.onError(Status.INTERNAL.withCause(e).withDescription("19").asException());
         }
+    }
+
+    protected void applyOrderState(Order order, OrderStatusTransition status) {
+        final Order acceptedOrder = statusStateMachine.apply(order, status);
+        orderRepository.save(acceptedOrder);
     }
 }
