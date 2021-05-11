@@ -1,0 +1,6 @@
+Sorry, I used to work with spring data and auto-mapping using annotation instead.
+I used spring-data-envers for tracking database changes. It's extend the Spring Data Repository with RevisionRepository.
+https://github.com/spring-projects/spring-data-envers
+Behind the screen it also adding table for tracking entity changes.
+The auto entity mapping table of Spring Data will take care the schema changes.
+In our case it will not effect the production database as it only adding new fields and tables nor modify any thing.
